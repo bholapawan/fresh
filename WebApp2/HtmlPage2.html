@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="Scripts/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Get all people</h2>
+                <div>
+                    <button class="btn btn-default" id="getPeople">Get People</button>
+                </div>
+                <div id="getPeopleResult" style="height:300px;width:200px;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    $('#getPeople').click(function (e) {
+        $("#getPeopleResult").val("");
+        alert('here');
+        $.ajax({
+            contentType: 'application/json',
+            type: "GET",
+            data: {},
+            url: "api/Employee/Index",
+            success: function (data) {
+                alert(data.d);
+                $.each(data, function (i, val) {
+                    alert(val.name);
+                })
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $("#getPeopleResult").val(jqXHR.statusText);
+            }
+        });
+    });
+</script>
+</html>

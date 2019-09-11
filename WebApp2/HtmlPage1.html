@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<!--<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="APICall.aspx.cs" Inherits="WebApplication1.APICall" %>-->
+<html>
+<head runat="server">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    
+
+    <script>
+        $(document).ready(function () {
+            alert('here');
+            $("#Save").click(function () {
+
+                $.ajax({
+                    url: 'http://localhost:58828/api/Employee/Index',
+                    type: 'GET',
+                    data: {},
+                    dataType: 'json',
+                    success: function (data, textStatus, xhr) {
+                        //console.log(data);
+                        var ht = '<table><tr><th>Name</th><th>Gender</th><th>Department</th><th>City</th></tr>'
+                        $.each(data, function (i, val) {
+                            ht += '<tr><td>' + val.Name + '</td><td>' + val.Gender + '</td><td>' + val.Department + '</td><td>' + val.City + '</td></tr>'
+                        })
+                        ht += '</table>'
+                        $('#getPeopleResult').html(ht);
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log('Error in Operation');
+                    }
+                });
+            });
+
+            $('#Save2').click(function (e) {
+                var name = $("#text1").val();
+                var gender = $("#text2").val();
+                var department = $("#text3").val();
+                var city = $("#text4").val();
+                alert(name + gender + department + city);
+
+                $.ajax({
+                    contentType: 'application/json',
+                    type: "POST",
+                    url: "http://localhost:58828/api/Employee/Create",
+                    data: JSON.stringify({
+                        name, gender, department, city
+                    }),
+                    success: function (data, textStatus, jqXHR) {
+
+                        $('#text1').val('');
+                        $('#text2').val('');
+                        $('#text3').val('');
+                        $('#text4').val('');
+                        alert("User Registered Successfully!");
+
+                        $("#postResult").val("Person created ok. Id=" + jqXHR.responseText);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $("#postResult").val(jqXHR.statusText);
+                    }
+                });
+            });
+
+
+        });
+    </script>
+</head>
+<body>
+
+    <div class="container">
+
+        <div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Name</label>
+                    <input type="text" class="form-control" id="text1">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Gender</label>
+                    <input type="text" class="form-control" id="text2">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Department</label>
+                    <input type="text" class="form-control" id="text3">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>City</label>
+                    <input type="text" class="form-control" id="text4">
+                </div>
+            </div>
+            
+            <button id="Save2" class="btn btn-primary">Sign in</button>
+        </div>
+
+
+
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Get all people</h2>
+                <div>
+                    <button class="btn btn-default" id="Save">Get People</button>
+                </div>
+                <div id="getPeopleResult" style="height:300px;width:200px;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>  
